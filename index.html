@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050505">
+<meta name="description" content="Vishal Kumar - Aspiring Software Engineer Portfolio">
+<title>Vishal Kumar | Software Engineer Portfolio</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+
+<!-- NEW: सारे नए effects का CSS -->
+  /* NEW: profile photo */
+.vk-photo{width:150px;height:150px;margin:0 auto;border-radius:50%;overflow:hidden;border:3px solid #ff1a1a;box-shadow:0 0 25px rgba(255,26,26,.8),0 0 60px rgba(255,26,26,.35);animation:photoGlow 2.5s ease-in-out infinite alternate}
+.vk-photo img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block}
+@keyframes photoGlow{to{box-shadow:0 0 40px rgba(255,26,26,1),0 0 90px rgba(255,26,26,.5)}}
+@media (max-width:600px){.vk-photo{width:110px;height:110px}}
+<style>
+/* 1. Particles background */
+#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+
+/* 2. Custom cursor glow */
+.cur-dot,.cur-glow{position:fixed;top:0;left:0;pointer-events:none;z-index:99999;opacity:0;transition:opacity .3s}
+.cur-dot{width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:#ff1a1a;box-shadow:0 0 12px #ff1a1a}
+.cur-glow{width:130px;height:130px;margin:-65px 0 0 -65px;border-radius:50%;background:radial-gradient(circle,rgba(255,26,26,.38) 0%,rgba(255,26,26,.12) 40%,transparent 70%)}
+.cur-dot.on,.cur-glow.on{opacity:1}
+
+/* 5. Loading screen name animation */
+.pre-name{display:flex;justify-content:center;margin:20px 0 0;font-family:'Outfit',sans-serif;font-weight:700;font-size:clamp(22px,6vw,34px);letter-spacing:.14em;color:#fff}
+.pre-name span{display:inline-block;opacity:0;transform:translateY(24px) scale(.6);text-shadow:0 0 18px rgba(255,26,26,.9);animation:nameIn .6s ease forwards;animation-delay:calc(var(--d) * .08s + .3s)}
+.pre-name .sp{width:.5em}
+@keyframes nameIn{to{opacity:1;transform:none}}
+
+/* 6. Glassmorphism cards */
+.skill-card,.project-card,.about-copy,.contact-box,.hero-card{
+  background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.02)) !important;
+  -webkit-backdrop-filter:blur(14px) saturate(140%);
+  backdrop-filter:blur(14px) saturate(140%);
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 8px 32px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* 3. Skills progress circles */
+.skill-ring{position:relative;width:88px;height:88px;margin:14px auto 4px}
+.skill-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.skill-ring circle{fill:none;stroke-width:6}
+.skill-ring .bg{stroke:rgba(255,255,255,.1)}
+.skill-ring .fg{stroke:#ff1a1a;stroke-linecap:round;stroke-dasharray:213.63;stroke-dashoffset:213.63;transition:stroke-dashoffset 1.8s ease;filter:drop-shadow(0 0 5px rgba(255,26,26,.8))}
+.skill-ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-size:16px;color:#fff}
+
+/* 4. Project cards 3D tilt */
+.project-card{will-change:transform}
+.project-card.tilting{transition:transform .12s ease-out !important}
+
+@media (prefers-reduced-motion:reduce){#particles{display:none}}
+</style>
+</head>
+
+<body>
+
+<!-- NEW: particles canvas + cursor glow -->
+<canvas id="particles"></canvas>
+<div class="cur-glow" id="curGlow"></div>
+<div class="cur-dot" id="curDot"></div>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="cursor-light"></div>
+<div class="vignette"></div>
+<div class="grain"></div>
+
+<div class="preloader" id="preloader">
+  <div class="pre-bar pre-top"></div>
+  <div class="pre-bar pre-bot"></div>
+  <div class="pre-content">
+    <div class="loader-logo">V<span>K.</span></div>
+    <p>WELCOME TO MY PORTFOLIO</p>
+    <div class="loader-line"></div>
+    <!-- NEW: नाम का animation -->
+    <div class="pre-name" aria-label="Vishal Kumar">
+      <span style="--d:0">V</span><span style="--d:1">I</span><span style="--d:2">S</span><span style="--d:3">H</span><span style="--d:4">A</span><span style="--d:5">L</span><span class="sp">&nbsp;</span><span style="--d:7">K</span><span style="--d:8">U</span><span style="--d:9">M</span><span style="--d:10">A</span><span style="--d:11">R</span>
+    </div>
+  </div>
+</div>
+
+<header class="navbar" id="navbar">
+  <a href="#home" class="logo">VISHAL<span>.</span></a>
+
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <nav id="navMenu">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact" class="nav-contact">Contact Me</a>
+  </nav>
+</header>
+
+<main>
+
+<section class="hero section" id="home">
+
+  <div class="hero-content">
+    <p class="eyebrow">
+      <span class="status-dot"></span>
+      WELCOME TO MY DIGITAL WORLD
+    </p>
+
+    <h1>
+      Hi, I'm<br>
+      <span class="name glitch" data-t="Vishal Kumar">Vishal Kumar</span>
+      <span class="red-dot">.</span>
+    </h1>
+
+    <h2 class="typing-heading">
+      I'm an <span id="typing-text">Aspiring Software Engineer</span><span class="typing-cursor">|</span>
+    </h2>
+
+    <p class="hero-description">
+      I am passionate about technology, software development
+      and creating modern digital experiences. I enjoy learning
+      new technologies and building creative solutions.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="#projects" class="btn btn-primary">
+        Explore My Work <i class="fas fa-arrow-right"></i>
+      </a>
+
+      <a href="#contact" class="btn btn-outline">
+        Let's Connect
+      </a>
+    </div>
+
+    <div class="hero-socials">
+      <a href="https://github.com/Vishal1kryadv/Vishal1-kryadv" target="_blank">GITHUB</a>
+      <a href="https://www.linkedin.com/in/vishal-kumar-aaa32b449" target="_blank">LINKEDIN</a>
+      <a href="https://www.instagram.com/3x.prime_/" target="_blank">INSTAGRAM</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+  <div class="orbit-scene">
+
+    <!-- Outer circular rings -->
+    <div class="orbit-ring orbit-ring-one"></div>
+    <div class="orbit-ring orbit-ring-two"></div>
+    <div class="orbit-ring orbit-ring-three"></div>
+
+    <!-- Rotating app icons -->
+    <div class="orbit-track">
+
+      <div class="orbit-item" style="--i:0"><i class="fa-brands fa-github"></i></div>
+      <div class="orbit-item" style="--i:1"><i class="fa-brands fa-linkedin"></i></div>
+      <div class="orbit-item" style="--i:2"><i class="fa-brands fa-instagram"></i></div>
+      <div class="orbit-item" style="--i:3"><i class="fa-brands fa-facebook"></i></div>
+      <div class="orbit-item" style="--i:4"><i class="fa-brands fa-whatsapp"></i></div>
+      <div class="orbit-item" style="--i:5"><i class="fa-brands fa-snapchat"></i></div>
+      <div class="orbit-item" style="--i:6"><i class="fa-brands fa-youtube"></i></div>
+      <div class="orbit-item" style="--i:7"><i class="fa-brands fa-telegram"></i></div>
+      <div class="orbit-item" style="--i:8"><i class="fa-brands fa-google"></i></div>
+      <div class="orbit-item" style="--i:9"><i class="fa-brands fa-chrome"></i></div>
+      <div class="orbit-item" style="--i:10"><i class="fa-solid fa-code"></i></div>
+      <div class="orbit-item" style="--i:11"><i class="fa-brands fa-python"></i></div>
+      <div class="orbit-item" style="--i:12"><i class="fa-brands fa-js"></i></div>
+      <div class="orbit-item" style="--i:13"><i class="fa-brands fa-html5"></i></div>
+      <div class="orbit-item" style="--i:14"><i class="fa-brands fa-css3-alt"></i></div>
+      <div class="orbit-item" style="--i:15"><i class="fa-brands fa-react"></i></div>
+      <div class="orbit-item" style="--i:16"><i class="fa-brands fa-node-js"></i></div>
+      <div class="orbit-item" style="--i:17"><i class="fa-brands fa-android"></i></div>
+      <div class="orbit-item" style="--i:18"><i class="fa-brands fa-apple"></i></div>
+      <div class="orbit-item" style="--i:19"><i class="fa-solid fa-database"></i></div>
+
+    </div>
+
+    <!-- Center VK Logo -->
+    <div class="orbit-center">
+      <div class="vk-photo" style="width:150px;height:150px;margin:0 auto;border-radius:50%;overflow:hidden;border:3px solid #ff1a1a;box-shadow:0 0 25px rgba(255,26,26,.8),0 0 60px rgba(255,26,26,.35);">
+<img style="width:100%;height:100%;object-fit:cover;display:block;border-radius:50%;" alt="Vishal Kumar" src="data:image/jpeg;base64,...
+      </div>
+      <p>VISHAL KUMAR</p>
+      <small>SOFTWARE ENGINEER</small>
+    </div>
+
+  </div>
+  </div>
+
+    <div class="hero-card">
+      <div class="card-top">
+        <span>PORTFOLIO / 2026</span>
+        <span>01 — 20</span>
+      </div>
+
+      <div class="monogram">V<span>K</span></div>
+
+      <div class="card-bottom">
+        <strong>VISHAL KUMAR</strong>
+        <span>ASPIRING SOFTWARE ENGINEER</span>
+      </div>
+    </div>
+
+    <div class="floating-tag tag-one">
+      <i class="fas fa-code"></i> Creative Developer
+    </div>
+
+    <div class="floating-tag tag-two">
+      <i class="fas fa-laptop"></i> Tech Enthusiast
+    </div>
+
+  </div>
+
+  <a href="#about" class="scroll-down">
+    SCROLL TO EXPLORE <span>↓</span>
+  </a>
+
+</section>
+<section class="section about-section" id="about">
+  <div class="section-heading reveal">
+    <p class="eyebrow">GET TO KNOW ME</p>
+    <h2>About <span>Me</span></h2>
+    <p class="section-intro">A little introduction about my journey and interests.</p>
+  </div>
+
+  <div class="about-grid">
+    <div class="about-mark reveal-left">
+      V<span>K</span>
+    </div>
+
+    <div class="about-copy reveal-right">
+      <h3>Aspiring <span>Software Engineer</span></h3>
+
+      <p>
+        Hello! I'm Vishal Kumar. I am passionate about software
+        engineering, programming and modern technology. Every day
+        I try to learn something new, whether it is a new coding
+        concept, a new tool or a better way to build things, and
+        this curiosity is what keeps me moving forward on my journey.
+      </p>
+
+      <p>
+        I enjoy exploring how websites and applications work,
+        learning new tools and turning ideas into useful digital
+        experiences. I like to understand what happens behind the
+        screen, from the way a page is designed to the way a
+        program thinks and responds. My goal is to keep improving
+        my skills and grow as a software engineer.
+      </p>
+
+      <p>
+        I believe in continuous learning, creativity and solving
+        problems through technology. I do not give up easily when
+        something does not work the first time. I try again, learn
+        from every mistake and keep practicing until the idea
+        becomes real. Even with simple tools and a lot of
+        dedication, I keep building websites and projects.
+      </p>
+
+      <p>
+        Right now I am focusing on web development, programming
+        fundamentals and creative projects. I am also interested in
+        artificial intelligence and mobile apps, and I want to
+        build useful products that can help people in their daily
+        lives. I am always open to learning, collaboration and new
+        opportunities in the world of technology.
+      </p>
+
+      <a href="#contact" class="text-link">
+        Let's work together <span>→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section skills-section" id="skills">
+  <div class="section-heading reveal">
+    <p class="eyebrow">MY TECHNICAL INTERESTS</p>
+    <h2>Skills & <span>Technologies</span></h2>
+    <p class="section-intro">
+      Technologies I am learning and exploring.
+    </p>
+  </div>
+
+  <div class="skills-grid">
+
+    <div class="skill-card reveal">
+      <i class="fab fa-html5"></i>
+      <h3>HTML5</h3>
+      <p>Web Structure</p>
+      <div class="skill-ring" data-percent="80">
+        <svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="34"></circle><circle class="fg" cx="40" cy="40" r="34"></circle></svg>
+        <b>0%</b>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <i class="fab fa-css3-alt"></i>
+      <h3>CSS3</h3>
+      <p>Web Design</p>
+      <div class="skill-ring" data-percent="70">
+        <svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="34"></circle><circle class="fg" cx="40" cy="40" r="34"></circle></svg>
+        <b>0%</b>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <i class="fab fa-js"></i>
+      <h3>JavaScript</h3>
+      <p>Web Interactivity</p>
+      <div class="skill-ring" data-percent="60">
+        <svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="34"></circle><circle class="fg" cx="40" cy="40" r="34"></circle></svg>
+        <b>0%</b>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <i class="fab fa-python"></i>
+      <h3>Python</h3>
+      <p>Programming</p>
+      <div class="skill-ring" data-percent="55">
+        <svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="34"></circle><circle class="fg" cx="40" cy="40" r="34"></circle></svg>
+        <b>0%</b>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <i class="fab fa-react"></i>
+      <h3>React</h3>
+      <p>Frontend Learning</p>
+      <div class="skill-ring" data-percent="40">
+        <svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="34"></circle><circle class="fg" cx="40" cy="40" r="34"></circle></svg>
+        <b>0%</b>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <i class="fab fa-github"></i>
+      <h3>GitHub</h3>
+      <p>Code Hosting</p>
+      <div class="skill-ring" data-percent="65">
+        <svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="34"></circle><circle class="fg" cx="40" cy="40" r="34"></circle></svg>
+        <b>0%</b>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section projects-section" id="projects">
+  <div class="section-heading reveal">
+    <p class="eyebrow">WHAT I'M WORKING ON</p>
+    <h2>Featured <span>Projects</span></h2>
+    <p class="section-intro">
+      A selection of projects and ideas from my learning journey.
+    </p>
+  </div>
+
+  <div class="project-grid">
+
+    <article class="project-card reveal">
+      <div class="project-art art-one">
+        <span>PROJECT 01</span>
+        <strong>AI<span>Saathi</span></strong>
+      </div>
+      <div class="project-info">
+        <div>
+          <h3>AI Saathi</h3>
+          <p>Grocery Marketplace Concept</p>
+        </div>
+        <a href="#" class="project-arrow" aria-label="Project details">↗</a>
+      </div>
+    </article>
+
+    <article class="project-card reveal">
+      <div class="project-art art-two">
+        <span>PROJECT 02</span>
+        <strong>WEB<span>DEV</span></strong>
+      </div>
+      <div class="project-info">
+        <div>
+          <h3>Web Development</h3>
+          <p>Modern Website Concepts</p>
+        </div>
+        <a href="https://github.com/Vishal1kryadv/Vishal1-kryadv" target="_blank" class="project-arrow" aria-label="GitHub project">↗</a>
+      </div>
+    </article>
+
+    <article class="project-card reveal">
+      <div class="project-art art-three">
+        <span>PROJECT 03</span>
+        <strong>MY<span>IDEA</span></strong>
+      </div>
+      <div class="project-info">
+        <div>
+          <h3>Future Projects</h3>
+          <p>Ideas in Development</p>
+        </div>
+        <a href="#contact" class="project-arrow" aria-label="Contact">↗</a>
+      </div>
+    </article>
+
+  </div>
+</section>
+<section class="section contact-section" id="contact">
+  <div class="contact-box reveal">
+    <p class="eyebrow">HAVE A PROJECT IN MIND?</p>
+    <h2>Let's Build <span>Something</span></h2>
+    <p>
+      I'm interested in learning, connecting and exploring
+      opportunities in technology. Feel free to reach out.
+    </p>
+
+    <div class="contact-buttons">
+      <a href="tel:8074406091" class="btn btn-primary">
+        <i class="fas fa-phone"></i> Call Me
+      </a>
+
+      <a href="https://wa.me/918074406091" target="_blank" class="btn btn-outline">
+        <i class="fab fa-whatsapp"></i> WhatsApp
+      </a>
+
+      <a href="https://github.com/Vishal1kryadv/Vishal1-kryadv" target="_blank" class="btn btn-outline">
+        <i class="fab fa-github"></i> GitHub
+      </a>
+    </div>
+
+    <div class="social-links">
+      <a class="social-link" href="https://www.instagram.com/3x.prime_/" target="_blank">
+        <i class="fab fa-instagram"></i> Instagram
+      </a>
+
+      <a class="social-link" href="https://www.linkedin.com/in/vishal-kumar-aaa32b449" target="_blank">
+        <i class="fab fa-linkedin"></i> LinkedIn
+      </a>
+
+      <a class="social-link" href="https://www.facebook.com/share/1Bt6NPw74c/" target="_blank">
+        <i class="fab fa-facebook"></i> Facebook
+      </a>
+
+      <a class="social-link" href="https://www.snapchat.com/add/u3933653" target="_blank">
+        <i class="fab fa-snapchat"></i> Snapchat
+      </a>
+
+      <a class="social-link" href="https://github.com/Vishal1kryadv/Vishal1-kryadv" target="_blank">
+        <i class="fab fa-github"></i> GitHub
+      </a>
+
+      <a class="social-link" href="https://wa.me/qr/B2MGP6YA2LJIJ1" target="_blank">
+        <i class="fab fa-whatsapp"></i> WhatsApp
+      </a>
+    </div>
+
+    <p class="contact-email">
+      <i class="fas fa-phone"></i> 8074406091
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <p>© 2026 Vishal Kumar. All Rights Reserved.</p>
+  <a href="#home" class="back-top">BACK TO TOP ↑</a>
+</footer>
+<script>
+/* PRELOADER */
+window.addEventListener("load", function () {
+  setTimeout(function () {
+    document.getElementById("preloader")?.classList.add("hide");
+    document.body.classList.add("loaded");
+  }, 2200); /* NEW: 700 से 2200 किया ताकि नाम का animation पूरा दिखे */
+});
+
+/* MOBILE MENU */
+const menuBtn = document.getElementById("menuBtn");
+const navMenu = document.getElementById("navMenu");
+
+menuBtn.addEventListener("click", function () {
+  navMenu.classList.toggle("open");
+  menuBtn.innerHTML = navMenu.classList.contains("open")
+    ? '<i class="fas fa-times"></i>'
+    : '<i class="fas fa-bars"></i>';
+});
+
+document.querySelectorAll("#navMenu a").forEach(function (link) {
+  link.addEventListener("click", function () {
+    navMenu.classList.remove("open");
+    menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+  });
+});
+
+/* TYPING EFFECT */
+const typingElement = document.getElementById("typing-text");
+const phrases = [
+  "Aspiring Software Engineer",
+  "Web Developer",
+  "Technology Enthusiast",
+  "Creative Problem Solver"
+];
+
+let phraseIndex = 0;
+let charIndex = 0;
+let deleting = false;
+
+function typeEffect() {
+  const current = phrases[phraseIndex];
+
+  if (!deleting) {
+    typingElement.textContent = current.substring(0, charIndex + 1);
+    charIndex++;
+
+    if (charIndex === current.length) {
+      deleting = true;
+      setTimeout(typeEffect, 1400);
+      return;
+    }
+  } else {
+    typingElement.textContent = current.substring(0, charIndex - 1);
+    charIndex--;
+
+    if (charIndex === 0) {
+      deleting = false;
+      phraseIndex = (phraseIndex + 1) % phrases.length;
+    }
+  }
+
+  setTimeout(typeEffect, deleting ? 45 : 85);
+}
+typeEffect();
+
+/* SCROLL PROGRESS + NAVBAR */
+const progress = document.getElementById("scrollProgress");
+const navbar = document.getElementById("navbar");
+
+function handleScroll() {
+  const scrollTop = window.scrollY;
+  const totalHeight =
+    document.documentElement.scrollHeight - window.innerHeight;
+
+  progress.style.width =
+    (totalHeight > 0 ? (scrollTop / totalHeight) * 100 : 0) + "%";
+
+  navbar.classList.toggle("scrolled", scrollTop > 50);
+}
+window.addEventListener("scroll", handleScroll, { passive: true });
+handleScroll();
+
+/* SCROLL REVEAL */
+const revealObserver = new IntersectionObserver(function (entries) {
+  entries.forEach(function (entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("show");
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll(".reveal, .reveal-left, .reveal-right")
+  .forEach(function (element) {
+    revealObserver.observe(element);
+  });
+
+/* ACTIVE NAV LINK */
+const sections = document.querySelectorAll("main section[id]");
+const navLinks = document.querySelectorAll("#navMenu a");
+
+const sectionObserver = new IntersectionObserver(function (entries) {
+  entries.forEach(function (entry) {
+    if (entry.isIntersecting) {
+      navLinks.forEach(function (link) {
+        link.classList.toggle(
+          "active",
+          link.getAttribute("href") === "#" + entry.target.id
+        );
+      });
+    }
+  });
+}, { rootMargin: "-35% 0px -55% 0px" });
+
+sections.forEach(function (section) {
+  sectionObserver.observe(section);
+});
+
+/* CURSOR LIGHT */
+const cursorLight = document.querySelector(".cursor-light");
+
+if (window.matchMedia("(hover:hover) and (pointer:fine)").matches) {
+  window.addEventListener("pointermove", function (event) {
+    cursorLight.style.setProperty("--cx", event.clientX + "px");
+    cursorLight.style.setProperty("--cy", event.clientY + "px");
+  }, { passive: true });
+}
+
+/* HERO PARALLAX */
+const heroVisual = document.querySelector(".hero-visual");
+
+if (window.matchMedia("(hover:hover) and (pointer:fine)").matches) {
+  window.addEventListener("pointermove", function (event) {
+    const x = (event.clientX / window.innerWidth - 0.5) * 8;
+    const y = (event.clientY / window.innerHeight - 0.5) * 8;
+
+    if (window.scrollY < window.innerHeight) {
+      heroVisual.style.setProperty("--move-x", x + "px");
+      heroVisual.style.setProperty("--move-y", y + "px");
+    }
+  }, { passive: true });
+}
+
+/* ================= NEW EFFECTS ================= */
+
+/* 1. PARTICLES BACKGROUND */
+(function () {
+  const canvas = document.getElementById("particles");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  let w, h;
+  const dots = [];
+  const count = window.innerWidth < 768 ? 40 : 80;
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  for (let i = 0; i < count; i++) {
+    dots.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      r: Math.random() * 1.8 + 0.6
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+
+    for (let i = 0; i < dots.length; i++) {
+      const p = dots[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0 || p.x > w) p.vx *= -1;
+      if (p.y < 0 || p.y > h) p.vy *= -1;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255,40,40,0.55)";
+      ctx.fill();
+
+      for (let j = i + 1; j < dots.length; j++) {
+        const q = dots[j];
+        const dx = p.x - q.x;
+        const dy = p.y - q.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < 14400) {
+          const d = Math.sqrt(d2);
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.strokeStyle = "rgba(255,40,40," + ((1 - d / 120) * 0.2) + ")";
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* 2. CUSTOM CURSOR GLOW */
+(function () {
+  const dot = document.getElementById("curDot");
+  const glow = document.getElementById("curGlow");
+  if (!dot || !glow) return;
+
+  let mx = 0, my = 0, gx = 0, gy = 0;
+  let running = false;
+  let hideTimer;
+
+  function loop() {
+    gx += (mx - gx) * 0.15;
+    gy += (my - gy) * 0.15;
+    glow.style.transform = "translate(" + gx + "px," + gy + "px)";
+    requestAnimationFrame(loop);
+  }
+
+  function move(e) {
+    mx = e.clientX;
+    my = e.clientY;
+    dot.style.transform = "translate(" + mx + "px," + my + "px)";
+
+    if (!running) {
+      running = true;
+      gx = mx;
+      gy = my;
+      loop();
+    }
+
+    dot.classList.add("on");
+    glow.classList.add("on");
+
+    if (e.pointerType === "touch") {
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(function () {
+        dot.classList.remove("on");
+        glow.classList.remove("on");
+      }, 600);
+    }
+  }
+
+  window.addEventListener("pointermove", move, { passive: true });
+  window.addEventListener("pointerdown", move, { passive: true });
+  document.addEventListener("mouseleave", function () {
+    dot.classList.remove("on");
+    glow.classList.remove("on");
+  });
+})();
+
+/* 3. SKILLS PROGRESS CIRCLES */
+(function () {
+  const C = 213.63;
+
+  const ringObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+
+      const ring = entry.target;
+      const percent = parseInt(ring.getAttribute("data-percent"), 10) || 0;
+      const label = ring.querySelector("b");
+
+      ring.querySelector(".fg").style.strokeDashoffset = C - (C * percent) / 100;
+
+      let n = 0;
+      const step = Math.max(1, Math.round(percent / 40));
+      const timer = setInterval(function () {
+        n += step;
+        if (n >= percent) {
+          n = percent;
+          clearInterval(timer);
+        }
+        label.textContent = n + "%";
+      }, 35);
+
+      ringObserver.unobserve(ring);
+    });
+  }, { threshold: 0.4 });
+
+  document.querySelectorAll(".skill-ring").forEach(function (ring) {
+    ringObserver.observe(ring);
+  });
+})();
+
+/* 4. PROJECT CARDS 3D TILT */
+(function () {
+  document.querySelectorAll(".project-card").forEach(function (card) {
+
+    function tilt(e) {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      card.classList.add("tilting");
+      card.style.transform =
+        "perspective(900px) rotateY(" + (x * 14) + "deg) rotateX(" + (-y * 14) + "deg) scale(1.03)";
+    }
+
+    function reset() {
+      card.classList.remove("tilting");
+      card.style.transform = "";
+    }
+
+    card.addEventListener("pointermove", tilt);
+    card.addEventListener("pointerdown", tilt);
+    card.addEventListener("pointerup", reset);
+    card.addEventListener("pointercancel", reset);
+    card.addEventListener("pointerleave", reset);
+  });
+})();
+</script>
+
+</body>
+  </html>
